@@ -1,6 +1,6 @@
 
 
-class WeatherMainModel{
+class WeatherMainModel {
 
   double temp;
   double tempMin;

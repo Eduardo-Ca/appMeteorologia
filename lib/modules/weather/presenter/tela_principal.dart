@@ -14,13 +14,13 @@ class TelaPrincipal extends StatefulWidget {
 }
 
 class _TelaPrincipalState extends State<TelaPrincipal> {
-  late WeatherStore wetherStore;
+  late WeatherStore weatherStore;
   String chaveApi = "7959b50d48a990765057d3f21f32f1cc";
 
   @override
   void didChangeDependencies() async{
 
-    wetherStore = Provider.of<WeatherStore>(context);
+    weatherStore = Provider.of<WeatherStore>(context);
     pegarClima();
 
     super.didChangeDependencies();
@@ -33,7 +33,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
       body: Stack(
         children: [
           imagemDeFundo(),
-          wetherStore.clima == null
+          weatherStore.clima == null
           ? carregandoGif()
           : card(),
         ],
@@ -58,12 +58,11 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
         child: Card(
           color: Colors.white.withOpacity(0.6),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
                Padding(
                 padding: const EdgeInsets.only(top: 40.0),
                 child: Text(
-                  wetherStore.clima!.name,
+                  weatherStore.clima!.name,
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 30,
@@ -73,7 +72,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
-                  "${wetherStore.clima!.weatherMain.temp}°",
+                  "${weatherStore.clima!.weatherMain.temp}°",
                   style: const TextStyle(color: Colors.white, fontSize: 40),
                 ),
               ),
@@ -82,9 +81,9 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 children: [
                   Icon(Icons.cloud, color: Colors.grey[700]),
                   Padding(
-                    padding: const EdgeInsets.only(top: 4.0, left: 10.0),
+                    padding: const EdgeInsets.only(top: 4.0, left: 14.0),
                     child: Text(
-                      wetherStore.clima!.weather[0].description,
+                      weatherStore.clima!.weather[0].description,
                       style: TextStyle(
                           color: Colors.grey[700], fontSize: 22),
                     ),
@@ -96,9 +95,9 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    const Icon(Icons.sunny,color: Colors.grey,),
+                    Icon(Icons.sunny,color: Colors.grey[700],),
                     Text(
-                      "Temperatura máxima: ${wetherStore.clima!.weatherMain.tempMax}°",
+                      "temperatura máxima: ${weatherStore.clima!.weatherMain.tempMax}°",
                       style:  TextStyle(color: Colors.grey[700], fontSize: 20),
                     ),
                   ],
@@ -108,9 +107,9 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                     const Icon(Icons.cloud_queue_rounded,color: Colors.grey),
+                    Icon(Icons.beach_access_outlined,color: Colors.grey[700]),
                     Text(
-                      "Temperatura mínima: ${wetherStore.clima!.weatherMain.tempMin}°",
+                      "temperatura mínima: ${weatherStore.clima!.weatherMain.tempMin}°",
                       style:  TextStyle(color: Colors.grey[700], fontSize: 20),
                     ),
                   ],
@@ -119,7 +118,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                Padding(
                 padding: const EdgeInsets.only(right: 135.0),
                 child: Text(
-                  "Sensação de: ${wetherStore.clima!.weatherMain.feelsLike}°",
+                  "sensação de: ${weatherStore.clima!.weatherMain.feelsLike}°",
                   style:  TextStyle(color: Colors.grey[700], fontSize: 20),
                 ),
               ),
@@ -140,11 +139,10 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
   }
 
   floatingButton(){
-    return  wetherStore.clima == null?  null: FloatingActionButton(
+    return  weatherStore.clima == null?  null: FloatingActionButton(
       onPressed: () async{
-        // ignore: unused_local_variable
-        dynamic busca;
-        busca = await Navigator.push(context,MaterialPageRoute(builder: (context) =>  BuscaTela(nomeCidade: wetherStore.clima!.name,)),);
+       
+        await Navigator.push(context,MaterialPageRoute(builder: (context) =>  BuscaTela(nomeCidade: weatherStore.clima!.name,)),);
         setState(() {});
       },
       child: const Icon(Icons.navigation),
@@ -152,9 +150,9 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
   }
 
   pegarClima() async{
-    if(wetherStore.clima == null){
-      await wetherStore.pegarPosicao();
-      await wetherStore.obterClima(chaveApi:chaveApi,lat: wetherStore.latitude,lon: wetherStore.longitude, lang:"pt_br",units: "metric");
+    if(weatherStore.clima == null){
+      await weatherStore.pegarPosicao();
+      await weatherStore.obterClima(chaveApi: chaveApi,lat: weatherStore.latitude,lon: weatherStore.longitude, lang:"pt_br",units: "metric");
       setState(() {});
     }
   }

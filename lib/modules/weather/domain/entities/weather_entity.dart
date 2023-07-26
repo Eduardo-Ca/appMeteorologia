@@ -2,7 +2,7 @@
 import 'package:equatable/equatable.dart';
 
 class Weather extends Equatable {
-  final String id;
+  final int id;
   final String description;
   const Weather({
     required this.id,
